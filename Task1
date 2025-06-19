@@ -1,0 +1,109 @@
+#include <iostream> // Required for input/output operations (cin, cout)
+#include <limits>   // Required for numeric_limits to clear input buffer
+
+// Function to perform addition
+double add(double num1, double num2) {
+    return num1 + num2;
+}
+
+// Function to perform subtraction
+double subtract(double num1, double num2) {
+    return num1 - num2;
+}
+
+// Function to perform multiplication
+double multiply(double num1, double num2) {
+    return num1 * num2;
+}
+
+// Function to perform division
+double divide(double num1, double num2) {
+    if (num2 == 0) {
+        // Handle division by zero error
+        std::cerr << "Error: Division by zero is not allowed." << std::endl;
+        return 0; // Return 0 or throw an exception
+    }
+    return num1 / num2;
+}
+
+// Function to display the menu
+void displayMenu() {
+    std::cout << "\n--- Simple Calculator ---" << std::endl;
+    std::cout << "1. Addition (+)" << std::endl;
+    std::cout << "2. Subtraction (-)" << std::endl;
+    std::cout << "3. Multiplication (*)" << std::endl;
+    std::cout << "4. Division (/)" << std::endl;
+    std::cout << "5. Exit" << std::endl;
+    std::cout << "-------------------------" << std::endl;
+}
+
+// Function to get user input for numbers
+double getNumberInput(const std::string& prompt) {
+    double num;
+    while (true) {
+        std::cout << prompt;
+        std::cin >> num;
+
+        // Check if input failed (e.g., user entered text instead of a number)
+        if (std::cin.fail()) {
+            std::cout << "Invalid input. Please enter a number." << std::endl;
+            // Clear the error flags
+            std::cin.clear();
+            // Ignore the rest of the invalid input line
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            // Input is valid, break out of the loop
+            return num;
+        }
+    }
+}
+
+int main() {
+    int choice;
+    double num1, num2;
+
+    do {
+        displayMenu();
+        std::cout << "Enter your choice (1-5): ";
+        std::cin >> choice;
+
+        // Input validation for choice
+        if (std::cin.fail() || choice < 1 || choice > 5) {
+            std::cout << "Invalid choice. Please enter a number between 1 and 5." << std::endl;
+            std::cin.clear(); // Clear error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            continue; // Skip to the next iteration of the loop
+        }
+
+        if (choice == 5) {
+            std::cout << "Exiting calculator. Goodbye!" << std::endl;
+            break; // Exit the loop
+        }
+
+        // Get numbers for calculation
+        num1 = getNumberInput("Enter the first number: ");
+        num2 = getNumberInput("Enter the second number: ");
+
+        switch (choice) {
+            case 1:
+                std::cout << "Result: " << num1 << " + " << num2 << " = " << add(num1, num2) << std::endl;
+                break;
+            case 2:
+                std::cout << "Result: " << num1 << " - " << num2 << " = " << subtract(num1, num2) << std::endl;
+                break;
+            case 3:
+                std::cout << "Result: " << num1 << " * " << num2 << " = " << multiply(num1, num2) << std::endl;
+                break;
+            case 4:
+                // Handle division by zero inside the divide function
+                std::cout << "Result: " << num1 << " / " << num2 << " = " << divide(num1, num2) << std::endl;
+                break;
+            default:
+                // This case should ideally not be reached due to previous validation
+                std::cout << "An unexpected error occurred." << std::endl;
+                break;
+        }
+    } while (true); // Loop indefinitely until user chooses to exit
+
+    return 0;
+}
